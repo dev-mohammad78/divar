@@ -1,15 +1,33 @@
 import divar from "../../../public/divar.svg";
 import intro from "../../assets/img/intro.webp";
 import { FiPhoneCall } from "react-icons/fi";
+
 import ThemeToggle from "../ThemeToggle";
+import { sendOtp } from "../../services/auth";
+import toast from "react-hot-toast";
 
 function SendOtpForm({ setStep, mobile, setMobile }) {
-  const submitHandler = (event) => {
+  
+  const submitHandler = async (event) => {
     event.preventDefault();
 
-    if (!/^09\d{9}$/.test(mobile)) return;
+    if (!/^09\d{9}$/.test(mobile)) {
+      toast.error("شماره موبایل معتبر نیست.");
+      return;
+    }
 
-    setStep(2);
+    const { response, error } = await sendOtp(mobile);
+
+    if (response) {
+      toast.success("کد تأیید ارسال شد.");
+      setStep(2);
+    }
+
+    if (error) {
+      toast.error(
+        error.response?.data?.message || "ارسال کد تأیید ناموفق بود.",
+      );
+    }
   };
 
   return (

@@ -63,7 +63,7 @@
 }
 
 #root {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -76,4 +76,16 @@ body {
   font-family: var(--sans);
   background-color: var(--bg-secondary);
   color: var(--text-primary);
+}
+
+/* Toast Theme */
+.custom-toast {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  direction: rtl;
+  box-shadow: var(--shadow-md);
 }
