@@ -1,13 +1,13 @@
 import divar from "../../../public/divar.svg";
 import intro from "../../assets/img/intro.webp";
 import { FiPhoneCall } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 import ThemeToggle from "../ThemeToggle";
 import { sendOtp } from "../../services/auth";
-import toast from "react-hot-toast";
 
 function SendOtpForm({ setStep, mobile, setMobile }) {
-  
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
@@ -53,7 +53,7 @@ function SendOtpForm({ setStep, mobile, setMobile }) {
           </p>
         </div>
         {/* number box */}
-        <div className="flex items-center gap-5 border border-[var(--border-color)] rounded-lg p-2 mt-4 min-w-[350px]">
+        <div className="flex items-center gap-5 border border-[var(--border-color)] rounded-lg p-3 mt-6 min-w-[350px]">
           <span>
             <FiPhoneCall className="text-[var(--text-secondary)]" />
           </span>
