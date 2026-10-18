@@ -4,10 +4,19 @@ import checking from "../../assets/img/checking.webp";
 
 import ThemeToggle from "../ThemeToggle";
 import OtpInput from "./OtpInput";
+import { checkOtp } from "../../services/auth";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
-  const submitHandler = (event) => {
-    event.PreventDefault();
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+
+    if (code.length !== 5) return;
+    const { response, error } = await checkOtp(mobile, code);
+    console.log({ response, error });
+
+    if (response) console.log(response);
+    if (error) console.log(error.response.data.message);
   };
 
   return (
@@ -32,9 +41,10 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
             کد تایید ارسال شده به شماره {mobile} را وارد کنید
           </p>
         </div>
-        {/* number box */}
 
+        {/* number box */}
         <OtpInput code={code} setCode={setCode} />
+
         <button
           type="submit"
           className="min-w-[350px] mt-8 p-3 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--text-white)]"
@@ -43,7 +53,7 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
         </button>
         <button
           onClick={() => setStep(1)}
-          className="flex items-center gap-x-2 mt-4 p-3 rounded-lg text-sm text-[var(--text-secondary)] cursor-pointer"
+          className="flex items-center gap-x-2 mt-4 p-3 text-sm text-[var(--text-secondary)] cursor-pointer"
         >
           ویرایش شماره موبایل
           <span>
@@ -52,7 +62,7 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
         </button>
       </form>
       {/* image */}
-      <div className="max-w-[600px] order-1 sm:order-2">
+      <div className="max-w-[400px] order-1 sm:order-2">
         <img
           src={checking}
           className="md:rounded-l-lg inset-0 h-full w-full object-center"
