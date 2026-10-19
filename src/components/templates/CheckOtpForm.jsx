@@ -5,9 +5,9 @@ import checking from "../../assets/img/checking.webp";
 import ThemeToggle from "../ThemeToggle";
 import OtpInput from "./OtpInput";
 import { checkOtp } from "../../services/auth";
+import { setCookie } from "../../utils/cookies";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
-
   const submitHandler = async (event) => {
     event.preventDefault();
 
@@ -15,7 +15,7 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
     const { response, error } = await checkOtp(mobile, code);
     console.log({ response, error });
 
-    if (response) console.log(response);
+    if (response) setCookie(response.data);
     if (error) console.log(error.response.data.message);
   };
 
