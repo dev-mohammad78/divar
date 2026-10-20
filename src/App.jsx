@@ -1,26 +1,28 @@
-import { Toaster } from "react-hot-toast";
-import AuthPage from "./pages/AuthPage";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools/production";
+import { Toaster } from "react-hot-toast";
+
+import defaultOptions from "./configs/reactQuery";
 import Router from "./router/Router";
+
+const queryClient = new QueryClient({ defaultOptions });
 
 function App() {
   return (
-    <BrowserRouter>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 3500,
-          className: "custom-toast",
-        }}
-      />
-      <Router />
-    </BrowserRouter>
-    
-    // <div className="bg-[var(--bg-tertiary)]">
-    //   {/* <h1 className="text-3xl font-semibold">پروژه دیوار</h1> */}
-
-    //   <AuthPage />
-    // </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3500,
+            className: "custom-toast",
+          }}
+        />
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 
