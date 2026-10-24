@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../services/user";
 
+import Loader from "../components/Loader";
 import HomePage from "../pages/HomePage";
 import DashboardPage from "../pages/DashboardPage";
 import AuthPage from "../pages/AuthPage";
@@ -13,7 +14,7 @@ function Router() {
     queryKey: ["profile"],
     queryFn: getProfile,
   });
-  if (isPending) return <p>Loading..</p>;
+  if (isPending) return <Loader size={80} />;
 
   console.log({ data, isPending, error });
 

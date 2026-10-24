@@ -89,3 +89,18 @@ body {
   direction: rtl;
   box-shadow: var(--shadow-md);
 }
+
+@keyframes divar-loader {
+  0%,
+  100% {
+    filter: grayscale(100%);
+  }
+
+  50% {
+    filter: grayscale(0%);
+  }
+}
+
+@theme {
+  --animate-divar-loader: divar-loader 1.5s ease-in-out infinite;
+}
