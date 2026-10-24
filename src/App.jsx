@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 
 import defaultOptions from "./configs/reactQuery";
 import Router from "./router/Router";
+import Layout from "./layouts/Layout";
 
 const queryClient = new QueryClient({ defaultOptions });
 
@@ -12,15 +13,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Router />
+        <Layout>
+          <Router />
+        </Layout>
       </BrowserRouter>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 3500,
-            className: "custom-toast",
-          }}
-        />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3500,
+          className: "custom-toast",
+        }}
+      />
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
