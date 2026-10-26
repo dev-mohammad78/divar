@@ -1,8 +1,11 @@
+import CategoryForm from "../components/templates/CategoryForm";
 
 function AdminPage() {
   return (
-    <div>AdminPage</div>
-  )
+    <div>
+      <CategoryForm />
+    </div>
+  );
 }
 
-export default AdminPage
+export default AdminPage;
