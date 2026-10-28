@@ -1,12 +1,23 @@
+import { useState } from "react";
+
+import { useMutation } from "@tanstack/react-query";
 import { MdOutlineAttachment, MdOutlineInsertEmoticon } from "react-icons/md";
 import { TbSubtitlesEdit } from "react-icons/tb";
 
+import { addCategory } from "../../services/admin";
+
 function CategoryForm() {
-  const [form, setForm] = {
+  const [form, setForm] = useState({
     name: "",
     slug: "",
     icon: "",
-  };
+  });
+
+  const { mutate, isPending, error, data } = useMutation({
+    mutationFn: addCategory,
+    onSuccess: (data) => console.log("Success:", data),
+    onError: (error) => console.log("Error:", error),
+  });
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -14,9 +25,18 @@ function CategoryForm() {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(form);
+
+    console.log("Form data:", form);
+
+    if (!form.name || !form.slug || !form.icon) {
+      console.log("Fields are empty");
+      return;
+    }
+
+    console.log("Sending request...");
+    mutate(form);
   };
-  
+
   return (
     <form
       className="p-3 md:p-5 space-y-8"
@@ -25,6 +45,21 @@ function CategoryForm() {
     >
       {/* header */}
       <p className="my-8 text-lg">افزودن دسته‌بندی جدید</p>
+
+      {/* error message */}
+      {!!error && (
+        <div className="bg-[var(--color-primary)] text-[var(--text-white)] p-4 rounded-md w-full md:max-w-lg text-center">
+          خطایی رخ داده است.
+        </div>
+      )}
+
+      {/* success message */}
+      {data?.status === 201 && (
+        <div className="bg-[var(--color-primary)] text-[var(--text-white)] p-4 rounded-md w-full md:max-w-lg text-center">
+          دسته‌بندی با موفقیت اضافه شد.
+        </div>
+      )}
+
       {/* name */}
       <div className="flex flex-col gap-y-4">
         <label htmlFor="name">نام دسته‌بندی</label>
@@ -74,10 +109,13 @@ function CategoryForm() {
       </div>
       {/* btn */}
       <button
+        disabled={isPending}
         type="submit"
-        className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover) p-3 rounded-md w-full md:max-w-lg cursor-pointer"
+        className={`bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] p-3 rounded-md w-full md:max-w-lg transition-opacity ${
+          isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
       >
-        ایجاد دسته‌بندی
+        {isPending ? "در حال ایجاد..." : "ایجاد دسته‌بندی"}
       </button>
     </form>
   );
