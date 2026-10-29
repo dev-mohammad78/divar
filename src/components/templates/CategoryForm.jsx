@@ -44,7 +44,9 @@ function CategoryForm() {
       onSubmit={submitHandler}
     >
       {/* header */}
-      <p className="my-8 text-lg">افزودن دسته‌بندی جدید</p>
+      <p className="hidden md:block md:my-4 text-lg">
+        افزودن دسته‌بندی جدید
+      </p>
 
       {/* error message */}
       {!!error && (
@@ -111,7 +113,7 @@ function CategoryForm() {
       <button
         disabled={isPending}
         type="submit"
-        className={`bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] p-3 rounded-md w-full md:max-w-lg transition-opacity ${
+        className={`bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--text-white)] p-3 rounded-md w-full md:max-w-lg transition-opacity ${
           isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         }`}
       >
