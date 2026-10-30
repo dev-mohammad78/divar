@@ -14,4 +14,9 @@ const getCookie = (cookieName) => {
     ?.split("=")[1];
 };
 
-export { setCookie, getCookie };
+const removeCookie = () => {
+  document.cookie = "accessToken=; max-age=0; path=/";
+  document.cookie = "refreshToken=; max-age=0; path=/";
+};
+
+export { setCookie, getCookie, removeCookie };

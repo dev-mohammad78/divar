@@ -49,10 +49,10 @@ function Router() {
       <Route
         path="/admin"
         element={
-          data && data.data.role === "ADMIN" ? (
+          data?.data?.role === "ADMIN" ? (
             <AdminPage />
           ) : (
-            <Navigate to="/" />
+            <Navigate to={data ? "/dashboard" : "/auth"} replace />
           )
         }
       />
