@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCategory } from "../../services/admin";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { deleteCategory, getCategory } from "../../services/admin";
 import Loader from "../Loader";
 import { FaRegTrashCan } from "react-icons/fa6";
 
@@ -8,8 +8,8 @@ function CategoryList() {
     queryKey: ["get-categories"],
     queryFn: getCategory,
   });
-
-  console.log({ isPending, data });
+  console.log(data?.data);
+  console.log(data?.data?.map((item) => item.id));
 
   return (
     <div>
@@ -21,7 +21,7 @@ function CategoryList() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto content-start max-h-[500px] mt-8">
             {data.data.map((item) => (
-              <CategoryItem key={item.id} item={item} />
+              <CategoryItem key={item._id} item={item} />
             ))}
           </div>
         </div>
@@ -33,6 +33,20 @@ function CategoryList() {
 export default CategoryList;
 
 function CategoryItem({ item }) {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-categories"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   return (
     <div className="p-3 border border-[var(--border-color)] rounded-md">
       <div className="flex items-center justify-between gap-x-4">
@@ -41,7 +55,14 @@ function CategoryItem({ item }) {
           <p>{item.name}</p>
         </div>
 
-        <button>
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={() => mutate(item._id)}
+          className={`transition-opacity ${
+            isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-[var(--color-primary)]"
+          }`}
+        >
           <FaRegTrashCan size={20} />
         </button>
       </div>

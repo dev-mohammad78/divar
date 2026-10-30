@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdOutlineAttachment, MdOutlineInsertEmoticon } from "react-icons/md";
 import { TbSubtitlesEdit } from "react-icons/tb";
 
@@ -12,10 +12,16 @@ function CategoryForm() {
     slug: "",
     icon: "",
   });
-
+  const queryClient = useQueryClient();
   const { mutate, isPending, error, data } = useMutation({
     mutationFn: addCategory,
-    onSuccess: (data) => console.log("Success:", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-categories"],
+      });
+
+      setForm({ name: "", slug: "", icon: "" });
+    },
     onError: (error) => console.log("Error:", error),
   });
 
@@ -44,9 +50,7 @@ function CategoryForm() {
       onSubmit={submitHandler}
     >
       {/* header */}
-      <p className="hidden md:block md:my-4 text-lg">
-        افزودن دسته‌بندی جدید
-      </p>
+      <p className="hidden md:block md:my-4 text-lg">افزودن دسته‌بندی جدید</p>
 
       {/* error message */}
       {!!error && (

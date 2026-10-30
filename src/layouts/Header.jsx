@@ -13,7 +13,7 @@ const Header = () => {
     queryFn: getProfile,
     retry: false,
   });
-  
+  const dashboardPath = user?.data.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm">
@@ -38,7 +38,7 @@ const Header = () => {
           <ThemeToggle />
 
           <Link
-            to={user ? "/dashboard" : "/auth"}
+            to={user ? dashboardPath : "/auth"}
             className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--color-primary)]"
           >
             <FiUser size={22} />
@@ -66,7 +66,7 @@ const Header = () => {
         <nav className="border-t border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 lg:hidden">
           <div className="flex flex-col gap-1">
             <Link
-              to={user ? "/dashboard" : "/auth"}
+              to={user ? dashboardPath : "/auth"}
               className="rounded-lg px-3 py-3 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
             >
               {user ? "دیوار من" : "ورود / ثبت‌نام"}
