@@ -62,6 +62,10 @@
   --shadow-lg: 0 10px 30px rgb(0 0 0 / 35%);
 }
 
+.dark select {
+  color-scheme: dark;
+}
+
 #root {
   max-width: 1600px;
   margin: 0 auto;
@@ -106,5 +110,15 @@ body {
 }
 
 @utility input-style {
-  @apply outline-none ring-0 shadow-none;
+  @apply w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] outline-none ring-0 shadow-none transition-all focus:border-[var(--color-primary)] focus:ring-0 placeholder:text-sm;
+}
+
+select,
+select option {
+  font-family: inherit;
+}
+
+select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-white);
 }

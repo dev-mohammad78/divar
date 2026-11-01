@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+
 import { getCategory } from "../../services/admin";
-import { useState } from "react";
+import formatNumber from "../../utils/formatNumber";
+import CustomSelect from "../common/CustomSelect";
 
 function AddPost() {
   const [form, setForm] = useState({
@@ -11,6 +14,17 @@ function AddPost() {
     category: "",
     images: [],
   });
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  useEffect(() => {
+    const previews = form.images.map((image) => URL.createObjectURL(image));
+
+    setImagePreviews(previews);
+
+    return () => {
+      previews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [form.images]);
 
   const { data } = useQuery({
     queryKey: ["get-categories"],
@@ -18,17 +32,19 @@ function AddPost() {
   });
 
   const changeHandler = (event) => {
-    const { name, value, files } = event.target;
+    const name = event.target.name;
 
-    if (name === "images") {
+    if (name !== "images") {
       setForm((prev) => ({
         ...prev,
-        images: Array.from(files),
+        [name]: event.target.value,
       }));
     } else {
+      const files = Array.from(event.target.files).slice(0, 4);
+
       setForm((prev) => ({
         ...prev,
-        [name]: value,
+        images: files,
       }));
     }
   };
@@ -38,39 +54,175 @@ function AddPost() {
     console.log("sent");
   };
 
+  const removeImageHandler = (index) => {
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
   return (
-    <form onChange={changeHandler} className="bg-red-300">
+    <form
+      onChange={changeHandler}
+      onSubmit={addHandler}
+      className="grid grid-cols-1 gap-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 shadow-sm sm:grid-cols-2 sm:p-6 mt-6 md:max-w-6xl mx-auto"
+    >
       {/* title */}
-      <label htmlFor="title">عنوان</label>
-      <input type="text" id="title" name="title" />
+      <div className="sm:col-span-2">
+        <label
+          htmlFor="title"
+          className="mb-2 block text-base font-medium text-[var(--text-primary)]"
+        >
+          عنوان آگهی
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="مثلاً آپارتمان ۸۰ متری در تهران"
+          className="input-style"
+        />
+      </div>
 
       {/* description */}
-      <label htmlFor="content">توضیحات</label>
-      <textarea id="content" name="content" />
-
-      {/* price */}
-      <label htmlFor="amount">قیمت</label>
-      <input type="text" id="amount" name="amount" />
-
-      {/* city */}
-      <label htmlFor="city">شهر</label>
-      <input type="text" id="city" name="city" />
+      <div className="sm:col-span-2">
+        <label
+          htmlFor="content"
+          className="mb-2 block text-base font-medium text-[var(--text-primary)]"
+        >
+          توضیحات آگهی
+        </label>
+        <textarea
+          id="content"
+          name="content"
+          rows={5}
+          placeholder="توضیحات کامل آگهی خود را وارد کنید..."
+          className="input-style resize-y"
+        />
+      </div>
 
       {/* category */}
-      <label htmlFor="category">دسته بندی</label>
-      <select name="category" id="category">
-        {data?.data?.map((item) => (
-          <option key={item._id} value={item._id}>
-            {item.name}
-          </option>
-        ))}
-      </select>
+      <div className="sm:col-span-2">
+        <label className="mb-2 block text-base font-medium text-[var(--text-primary)]">
+          دسته‌بندی آگهی
+        </label>
+
+        <CustomSelect
+          options={
+            data?.data?.map((item) => ({
+              value: item._id,
+              label: item.name,
+            })) || []
+          }
+          value={form.category}
+          onChange={(value) =>
+            setForm((prev) => ({
+              ...prev,
+              category: value,
+            }))
+          }
+          placeholder="دسته‌بندی موردنظر را انتخاب کنید"
+        />
+      </div>
+
+      {/* price */}
+      <div>
+        <label
+          htmlFor="amount"
+          className="mb-2 block text-base font-medium text-[var(--text-primary)]"
+        >
+          قیمت (تومان)
+        </label>
+        <input
+          type="text"
+          inputMode="numeric"
+          id="amount"
+          name="amount"
+          placeholder="مثلاً ۱۵,۰۰۰,۰۰۰"
+          className="input-style"
+          value={formatNumber(form.amount)}
+        />
+      </div>
+
+      {/* city */}
+      <div>
+        <label
+          htmlFor="city"
+          className="mb-2 block text-base font-medium text-[var(--text-primary)]"
+        >
+          شهر
+        </label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          placeholder="نام شهر را وارد کنید"
+          className="input-style"
+        />
+      </div>
 
       {/* images */}
-      <label htmlFor="images">تصاویر آگهی</label>
-      <input type="file" name="images" id="images" multiple accept="image/*" />
+      <div className="sm:col-span-2">
+        <label
+          htmlFor="images"
+          className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-[var(--border-color)] bg-[var(--bg-tertiary)] p-8 text-center transition hover:border-[var(--color-primary)]"
+        >
+          <span className="text-base font-medium text-[var(--text-primary)]">
+            انتخاب تصاویر آگهی
+          </span>
+
+          <span className="text-sm text-[var(--text-secondary)]">
+            حداکثر ۴ تصویر با فرمت JPG، PNG یا WebP
+          </span>
+
+          <span className="rounded-lg bg-[var(--color-primary)] px-5 py-2 text-sm text-white transition hover:bg-[var(--color-primary-hover)]">
+            انتخاب فایل
+          </span>
+        </label>
+
+        <input
+          type="file"
+          name="images"
+          id="images"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          onChange={changeHandler}
+          className="hidden"
+        />
+
+        {form.images.length > 0 && (
+          <div className="grid grid-cols-2 gap-4 sm:col-span-2 sm:grid-cols-4 mt-2">
+            {form.images.map((image, index) => (
+              <div
+                key={`${image.name}-${index}`}
+                className="relative overflow-hidden rounded-lg border border-[var(--border-color)]"
+              >
+                <img
+                  src={imagePreviews[index]}
+                  alt={`تصویر ${index + 1}`}
+                  className="h-32 w-full object-cover"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => removeImageHandler(index)}
+                  className="absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-red-600 text-white transition hover:bg-red-700"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* btn */}
-      <button onClick={addHandler}>ثبت آگهی</button>
+      <button
+        type="submit"
+        className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--text-white)] p-4 rounded-lg w-full sm:col-span-2 transition"
+      >
+        ثبت آگهی
+      </button>
     </form>
   );
 }
