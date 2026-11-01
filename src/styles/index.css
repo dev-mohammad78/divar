@@ -104,3 +104,7 @@ body {
 @theme {
   --animate-divar-loader: divar-loader 1.5s ease-in-out infinite;
 }
+
+@utility input-style {
+  @apply outline-none ring-0 shadow-none;
+}
