@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import toast from "react-hot-toast";
 
+import { getCookie } from "../../utils/cookies";
 import { getCategory } from "../../services/admin";
 import formatNumber from "../../utils/formatNumber";
 import CustomSelect from "../common/CustomSelect";
@@ -49,9 +52,50 @@ function AddPost() {
     }
   };
 
-  const addHandler = (event) => {
+  const addHandler = async (event) => {
     event.preventDefault();
-    console.log("sent");
+
+    if (
+      !form.title.trim() ||
+      !form.content.trim() ||
+      !form.amount ||
+      !form.city.trim() ||
+      !form.category ||
+      !form.images.length
+    ) {
+      toast.error("لطفاً تمام فیلدها را تکمیل کنید.");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("title", form.title);
+    formData.append("content", form.content);
+    formData.append("amount", form.amount.replace(/,/g, ""));
+    formData.append("city", form.city);
+    formData.append("category", form.category);
+
+    form.images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    const token = getCookie("accessToken");
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/post/create`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      toast.success(response.data);
+    } catch (error) {
+      toast.error(error.response?.data || error.message);
+    }
   };
 
   const removeImageHandler = (index) => {
@@ -141,6 +185,14 @@ function AddPost() {
           placeholder="مثلاً ۱۵,۰۰۰,۰۰۰"
           className="input-style"
           value={formatNumber(form.amount)}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, "");
+
+            setForm((prev) => ({
+              ...prev,
+              amount: value,
+            }));
+          }}
         />
       </div>
 
