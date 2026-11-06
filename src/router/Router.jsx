@@ -23,15 +23,7 @@ function Router() {
       <Route index element={<HomePage />} />
       <Route
         path="/dashboard"
-        element={
-          !data ? (
-            <Navigate to="/auth" replace />
-          ) : data.data.role === "ADMIN" ? (
-            <Navigate to="/admin" replace />
-          ) : (
-            <DashboardPage />
-          )
-        }
+        element={data ? <DashboardPage /> : <Navigate to="/auth" replace />}
       />
       <Route
         path="/auth"

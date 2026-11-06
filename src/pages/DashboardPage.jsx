@@ -85,7 +85,22 @@ function DashboardPage() {
             </section>
           )}
 
-          {activeTab === "posts" && <PostList />}
+          {activeTab === "posts" && (
+            <section>
+              <div className="p-2 md:p-4">
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">
+                  آگهی های من
+                </h2>
+                <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                  مدیریت و مشاهده آگهی های منتشر شده
+                </p>
+              </div>
+
+              <div className="p-2 md:px-4">
+                <PostList />
+              </div>
+            </section>
+          )}
         </main>
       </div>
     </div>
