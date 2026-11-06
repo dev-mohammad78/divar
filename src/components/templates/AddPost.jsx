@@ -109,7 +109,7 @@ function AddPost() {
     <form
       onChange={changeHandler}
       onSubmit={addHandler}
-      className="grid grid-cols-1 gap-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 shadow-sm sm:grid-cols-2 sm:p-6 mt-6 md:max-w-6xl mx-auto"
+      className="grid grid-cols-1 gap-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 shadow-sm sm:grid-cols-2 sm:p-6 mt-2 md:max-w-6xl mx-auto"
     >
       {/* title */}
       <div className="sm:col-span-2">
