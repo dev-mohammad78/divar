@@ -91,12 +91,22 @@ const Header = () => {
 
               {dropdownOpen && (
                 <div className="absolute left-0 top-full mt-3 w-48 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2 shadow-lg">
+                  {user.data.role === "ADMIN" && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setDropdownOpen(false)}
+                      className="block rounded-md p-3 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                    >
+                      مدیریت پنل
+                    </Link>
+                  )}
+
                   <Link
-                    to={dashboardPath}
+                    to="/dashboard"
                     onClick={() => setDropdownOpen(false)}
                     className="block rounded-md p-3 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                   >
-                    {user.data.role === "ADMIN" ? "پنل مدیریت" : "داشبورد"}
+                    داشبورد
                   </Link>
 
                   <button
@@ -151,15 +161,28 @@ const Header = () => {
 
                 {dropdownOpen && (
                   <div className="mr-3 border-r-2 border-[var(--border-color)] pr-3">
+                    {user.data.role === "ADMIN" && (
+                      <Link
+                        to="/admin"
+                        onClick={() => {
+                          setDropdownOpen(false);
+                          setMenuOpen(false);
+                        }}
+                        className="block rounded-lg px-3 py-3 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                      >
+                        مدیریت پنل
+                      </Link>
+                    )}
+
                     <Link
-                      to={dashboardPath}
+                      to="/dashboard"
                       onClick={() => {
                         setDropdownOpen(false);
                         setMenuOpen(false);
                       }}
                       className="block rounded-lg px-3 py-3 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                     >
-                      {user.data.role === "ADMIN" ? "پنل مدیریت" : "داشبورد"}
+                      داشبورد
                     </Link>
 
                     <button

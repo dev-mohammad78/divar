@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getPosts } from "../../services/user";
 import Loader from "../Loader";
+import { FaLocationDot } from "react-icons/fa6";
+import { formatPersianDate } from "../../utils/formatPersianDate";
 
 function PostList() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -10,7 +12,6 @@ function PostList() {
     queryKey: ["my-post-list"],
     queryFn: getPosts,
   });
-  console.log({ data });
 
   return (
     <div className="p-1 sm:p-6 mt-2">
@@ -36,12 +37,25 @@ function PostList() {
                   <p className="text-sm md:text-base text-[var(--text-secondary)]">
                     {post.options.content}
                   </p>
-                  <p>{post.options.city}</p>
+                  <div className="flex gap-2 items-center">
+                    <FaLocationDot className="text-[var(--color-primary)]" />
+                    <p>{post.options.city}</p>
+                  </div>
                 </div>
 
-                <div>
-                  <p>{post.amount.toLocaleString("fa-IR")} تومان</p>
-                  <p>{post.createdAt}</p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[var(--text-secondary)] text-sm">
+                      تاریخ انتشار:
+                    </p>
+                    <p className="text-[var(--text-secondary)] text-sm">
+                      {formatPersianDate(post.createdAt)}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p>قیمت:</p>
+                    <p>{post.amount.toLocaleString("fa-IR")} تومان</p>
+                  </div>
                 </div>
               </div>
             </div>
