@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { IoIosArrowBack } from "react-icons/io";
+
 import divar from "../../../public/divar.svg";
 import checking from "../../assets/img/checking.webp";
 
@@ -6,11 +9,12 @@ import ThemeToggle from "../ThemeToggle";
 import OtpInput from "./OtpInput";
 import { checkOtp } from "../../services/auth";
 import { setCookie } from "../../utils/cookies";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../../services/user";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
+  const queryClient = useQueryClient();
+
   const navigate = useNavigate();
   const { refetch } = useQuery({
     queryKey: ["profile"],
@@ -30,6 +34,10 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
       refetch();
     }
     if (error) console.log(error.response.data.message);
+
+    queryClient.removeQueries({
+      queryKey: ["my-post-list"],
+    });
   };
 
   return (

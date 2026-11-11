@@ -1,25 +1,32 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { getPosts } from "../../services/user";
 import Loader from "../Loader";
 import { FaLocationDot } from "react-icons/fa6";
 import { formatPersianDate } from "../../utils/formatPersianDate";
+import PostFilters from "../common/PostFilters";
 
 function PostList() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
+  const [sort, setSort] = useState("newest");
+
   const { data, isPending } = useQuery({
-    queryKey: ["my-post-list"],
-    queryFn: getPosts,
+    queryKey: ["my-post-list", sort],
+    queryFn: () => getPosts({ sort }),
   });
 
   return (
     <div className="p-1 sm:p-6 mt-2">
+      {/* post filter */}
+      <PostFilters sort={sort} setSort={setSort} />
+
       {isPending ? (
         <Loader />
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2  gap-5">
-          {data.data.posts.map((post) => (
+          {data?.posts.map((post) => (
             <div
               key={post._id}
               className="flex flex-col md:flex-row gap-x-5 p-4 border border-[var(--border-color)] rounded-lg"

@@ -50,6 +50,9 @@ const Header = () => {
     removeCookie();
 
     queryClient.setQueryData(["profile"], null);
+    queryClient.removeQueries({
+      queryKey: ["my-post-list"],
+    });
 
     setDropdownOpen(false);
     setMenuOpen(false);
