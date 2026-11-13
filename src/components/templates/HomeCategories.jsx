@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+
 import { getCategory } from "../../services/admin";
 
 const getCategoryIcon = (name) => {
@@ -43,7 +45,8 @@ const HomeCategories = () => {
 
       <div className="flex gap-3 overflow-x-auto pb-3 sm:grid sm:grid-cols-5 sm:overflow-visible">
         {categories.map((category) => (
-          <div
+          <Link
+            to={`/posts?category=${category.slug}`}
             key={category._id}
             className="flex justify-center items-center gap-3 whitespace-nowrap rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] px-5 py-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           >
@@ -52,7 +55,7 @@ const HomeCategories = () => {
             <span className="text-sm font-semibold text-[var(--text-primary)]">
               {category.name}
             </span>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
