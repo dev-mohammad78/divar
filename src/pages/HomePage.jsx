@@ -1,11 +1,12 @@
 import HomeCategories from "../components/templates/HomeCategories";
+import LatestPosts from "../components/templates/LatestPosts";
 
 const HomePage = () => {
   return (
     <main>
       {/* Hero */}
       <HomeCategories />
-      {/* Latest Posts */}
+      <LatestPosts />
       {/* CTA */}
     </main>
   );
