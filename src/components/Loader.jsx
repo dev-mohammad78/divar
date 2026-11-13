@@ -1,8 +1,12 @@
 import divar from "../../public/divar.svg";
 
-const Loader = ({ size = 64 }) => {
+const Loader = ({ size = 64, fullScreen = true }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div
+      className={`flex items-center justify-center ${
+        fullScreen ? "min-h-screen" : "min-h-[300px]"
+      }`}
+    >
       <img
         src={divar}
         alt="Loading..."

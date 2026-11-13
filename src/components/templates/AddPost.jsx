@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -33,6 +33,8 @@ function AddPost() {
     queryKey: ["get-categories"],
     queryFn: getCategory,
   });
+
+  const queryClient = useQueryClient();
 
   const changeHandler = (event) => {
     const name = event.target.name;
@@ -68,6 +70,7 @@ function AddPost() {
     }
 
     const formData = new FormData();
+    
 
     formData.append("title", form.title);
     formData.append("content", form.content);
@@ -93,6 +96,10 @@ function AddPost() {
       );
 
       toast.success(response.data.message);
+
+      await queryClient.invalidateQueries({
+        queryKey: ["my-post-list"],
+      });
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }
