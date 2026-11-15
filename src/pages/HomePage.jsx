@@ -1,5 +1,6 @@
 import Hero from "../components/templates/Hero";
 import HomeCategories from "../components/templates/HomeCategories";
+import HomeCTA from "../components/templates/HomeCTA";
 import LatestPosts from "../components/templates/LatestPosts";
 
 const HomePage = () => {
@@ -8,7 +9,7 @@ const HomePage = () => {
       <Hero />
       <HomeCategories />
       <LatestPosts />
-      {/* CTA */}
+      <HomeCTA />
     </main>
   );
 };

@@ -135,7 +135,7 @@ const Header = () => {
 
         {/* Desktop ad button */}
         <Link
-          to="/posts/create"
+          to="/dashboard"
           className="hidden shrink-0 items-center gap-2 rounded-lg bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition hover:bg-[var(--color-primary-hover)] md:flex"
         >
           <FiPlus size={17} />
@@ -210,7 +210,7 @@ const Header = () => {
             )}
 
             <Link
-              to="/posts/create"
+              to="/dashboard"
               className="rounded-lg px-3 py-3 text-sm text-[var(--color-primary)] hover:bg-[var(--bg-tertiary)]"
             >
               ثبت آگهی
