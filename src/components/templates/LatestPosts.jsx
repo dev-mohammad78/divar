@@ -25,17 +25,17 @@ const LatestPosts = () => {
     <section className="mx-auto max-w-7xl px-4 lg:px-10">
       <div className="mb-6 px-3 flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold text-[var(--text-primary)] md:text-2xl">
+          <h2 className="text-lg font-bold text-[var(--text-primary)] md:text-2xl">
             جدیدترین آگهی‌ها
           </h2>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">
+          <p className="mt-2 text-xs md:text-sm text-[var(--text-secondary)]">
             تازه‌ترین آگهی‌های ثبت‌شده را ببینید.
           </p>
         </div>
 
         <Link
           to="/posts"
-          className="text-sm font-semibold text-[var(--color-primary)] transition-colors hover:opacity-80"
+          className="text-xs md:text-sm font-semibold text-[var(--color-primary)] transition-colors hover:opacity-80"
         >
           مشاهده همه آگهی‌ها
         </Link>

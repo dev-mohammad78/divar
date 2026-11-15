@@ -1,10 +1,11 @@
+import Hero from "../components/templates/Hero";
 import HomeCategories from "../components/templates/HomeCategories";
 import LatestPosts from "../components/templates/LatestPosts";
 
 const HomePage = () => {
   return (
     <main>
-      {/* Hero */}
+      <Hero />
       <HomeCategories />
       <LatestPosts />
       {/* CTA */}
