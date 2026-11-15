@@ -24,13 +24,15 @@ function PostList() {
   return (
     <div className="p-1 sm:p-6 mt-2">
       {/* post filter */}
-      <PostFilters
-        sort={sort}
-        setSort={setSort}
-        category={category}
-        setCategory={setCategory}
-        categories={categoriesData?.data || []}
-      />
+      <div className="py-4">
+        <PostFilters
+          sort={sort}
+          setSort={setSort}
+          category={category}
+          setCategory={setCategory}
+          categories={categoriesData?.data || []}
+        />
+      </div>
 
       {isPending ? (
         <Loader fullScreen={false} />

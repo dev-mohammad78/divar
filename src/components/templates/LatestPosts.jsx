@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getLatestPosts } from "../../services/post";
 import PostItems from "./PostItems";
@@ -22,13 +23,22 @@ const LatestPosts = () => {
 
   return (
     <section className="mx-auto max-w-7xl px-4 lg:px-10">
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-[var(--text-primary)] md:text-2xl">
-          جدیدترین آگهی‌ها
-        </h2>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          تازه‌ترین آگهی‌های ثبت‌شده را ببینید.
-        </p>
+      <div className="mb-6 px-3 flex justify-between items-center">
+        <div>
+          <h2 className="text-xl font-bold text-[var(--text-primary)] md:text-2xl">
+            جدیدترین آگهی‌ها
+          </h2>
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            تازه‌ترین آگهی‌های ثبت‌شده را ببینید.
+          </p>
+        </div>
+
+        <Link
+          to="/posts"
+          className="text-sm font-semibold text-[var(--color-primary)] transition-colors hover:opacity-80"
+        >
+          مشاهده همه آگهی‌ها
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

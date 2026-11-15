@@ -4,38 +4,40 @@ import { formatPersianDate } from "../../utils/formatPersianDate";
 
 function PostItems({ post }) {
   return (
-    <div className="flex flex-col md:flex-row gap-x-5 p-4 border border-[var(--border-color)] rounded-lg">
+    <div className="flex flex-col gap-4 rounded-lg border border-[var(--border-color)] p-4 md:flex-row md:gap-x-5">
       <img
-        src={`${baseUrl}/${post.images[0]}`}
+        src={
+          post.images?.[0] ? `${baseUrl}/${post.images[0]}` : "/placeholder.png"
+        }
         alt={post.options.title}
-        className="w-full md:w-[200px] h-[300px] md:h-[200px]  object-center rounded-lg"
+        className="h-[250px] w-full rounded-lg object-cover md:h-[200px] md:w-[200px]"
       />
 
-      {/* details */}
-      <div className="flex flex-col gap-6 mt-2 p-2">
+      <div className="mt-2 flex flex-col gap-6 p-2">
         <div className="space-y-3">
-          <h1 className="text-lg font-bold">{post.options.title}</h1>
-          <p className="text-sm md:text-base text-[var(--text-secondary)]">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">
+            {post.options.title}
+          </h2>
+
+          <p className="line-clamp-2 text-sm text-[var(--text-secondary)] md:text-base">
             {post.options.content}
           </p>
-          <div className="flex gap-2 items-center">
+
+          <div className="flex items-center gap-2 text-[var(--text-secondary)]">
             <FaLocationDot className="text-[var(--color-primary)]" />
             <p>{post.options.city}</p>
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <p className="text-[var(--text-secondary)] text-sm">
-              تاریخ انتشار:
-            </p>
-            <p className="text-[var(--text-secondary)] text-sm">
-              {formatPersianDate(post.createdAt)}
-            </p>
+          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+            <p>تاریخ انتشار:</p>
+            <p>{formatPersianDate(post.createdAt)}</p>
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center gap-2 text-[var(--text-primary)]">
             <p>قیمت:</p>
-            <p>{post.amount.toLocaleString("fa-IR")} تومان</p>
+            <p>{post.amount?.toLocaleString("fa-IR")} تومان</p>
           </div>
         </div>
       </div>

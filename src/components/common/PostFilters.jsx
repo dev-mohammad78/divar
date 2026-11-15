@@ -1,6 +1,6 @@
 function PostFilters({ sort, setSort, category, setCategory, categories }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-3 mb-6">
+    <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
       {/* Category */}
       <select
         value={category}
@@ -15,7 +15,6 @@ function PostFilters({ sort, setSort, category, setCategory, categories }) {
           </option>
         ))}
       </select>
-
       {/* Sort */}
       <select
         value={sort}
