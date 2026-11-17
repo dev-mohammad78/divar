@@ -1,10 +1,14 @@
+import { Link } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { baseUrl } from "../../constant/baseUrl";
 import { formatPersianDate } from "../../utils/formatPersianDate";
 
 function PostItems({ post }) {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-[var(--border-color)] p-4 md:flex-row md:gap-x-5">
+    <Link
+      to={`/posts/${post._id}`}
+      className="flex flex-col gap-4 rounded-lg border border-[var(--border-color)] p-4 md:flex-row md:gap-x-5"
+    >
       <img
         src={
           post.images?.[0] ? `${baseUrl}/${post.images[0]}` : "/placeholder.png"
@@ -41,7 +45,7 @@ function PostItems({ post }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -7,7 +7,7 @@ import ThemeToggle from "../ThemeToggle";
 import { sendOtp } from "../../services/auth";
 
 function SendOtpForm({ setStep, mobile, setMobile }) {
-
+  
   const submitHandler = async (event) => {
     event.preventDefault();
 

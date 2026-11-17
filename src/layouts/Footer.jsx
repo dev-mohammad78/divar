@@ -11,16 +11,13 @@ const Footer = () => {
   const categories = data?.data?.slice(0, 5) || [];
 
   return (
-    <footer className="mt-16 border-t border-[var(--border-color)] bg-[var(--bg-secondary)]">
+    <footer className="border-t border-[var(--border-color)] bg-[var(--bg-secondary)]">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-10">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-flex items-center gap-3">
               <img src="/divar.svg" alt="لوگو" className="h-10 w-10" />
-              <span className="text-xl font-extrabold text-[var(--text-primary)]">
-                دیوار
-              </span>
             </Link>
 
             <p className="mt-5 max-w-md text-sm leading-8 text-[var(--text-secondary)]">

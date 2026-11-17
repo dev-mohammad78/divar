@@ -70,7 +70,6 @@ function AddPost() {
     }
 
     const formData = new FormData();
-    
 
     formData.append("title", form.title);
     formData.append("content", form.content);
@@ -97,8 +96,9 @@ function AddPost() {
 
       toast.success(response.data.message);
 
-      await queryClient.invalidateQueries({
+      await queryClient.refetchQueries({
         queryKey: ["my-post-list"],
+        type: "active",
       });
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);

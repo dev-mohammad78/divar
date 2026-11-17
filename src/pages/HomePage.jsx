@@ -5,7 +5,7 @@ import LatestPosts from "../components/templates/LatestPosts";
 
 const HomePage = () => {
   return (
-    <main>
+    <main className="bg-[var(--bg-tertiary)]">
       <Hero />
       <HomeCategories />
       <LatestPosts />

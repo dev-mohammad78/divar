@@ -5,3 +5,6 @@ export const getLatestPosts = () =>
 
 export const getPosts = (params) =>
   api.get("/post", { params }).then((res) => res.data);
+
+export const getPostById = (id) =>
+  api.get(`/post/${id}`).then((res) => res.data);

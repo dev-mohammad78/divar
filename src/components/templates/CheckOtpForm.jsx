@@ -9,17 +9,11 @@ import ThemeToggle from "../ThemeToggle";
 import OtpInput from "./OtpInput";
 import { checkOtp } from "../../services/auth";
 import { setCookie } from "../../utils/cookies";
-import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "../../services/user";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
-  const { refetch } = useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfile,
-  });
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -30,8 +24,9 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
 
     if (response) {
       setCookie(response.data);
-      navigate("/");
-      refetch();
+      await queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
     }
     if (error) console.log(error.response.data.message);
 
