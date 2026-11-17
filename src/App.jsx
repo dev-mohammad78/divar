@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import defaultOptions from "./configs/reactQuery";
 import Router from "./router/Router";
 import Layout from "./layouts/Layout";
+import ScrollToTop from "./layouts/ScrollToTop";
 
 const queryClient = new QueryClient({ defaultOptions });
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <ScrollToTop />
         <Layout>
           <Router />
         </Layout>
