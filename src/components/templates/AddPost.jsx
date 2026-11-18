@@ -98,7 +98,7 @@ function AddPost() {
 
       await queryClient.refetchQueries({
         queryKey: ["my-post-list"],
-        type: "active",
+        type: "all",
       });
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);

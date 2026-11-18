@@ -5,6 +5,7 @@ import { getProfile } from "../services/user";
 import Loader from "../components/Loader";
 import HomePage from "../pages/HomePage";
 import DashboardPage from "../pages/DashboardPage";
+import CreatePostPage from "../pages/CreatePostPage";
 import AuthPage from "../pages/AuthPage";
 import AdminPage from "../pages/AdminPage";
 import PostsPage from "../pages/PostsPage";
@@ -26,6 +27,10 @@ function Router() {
       <Route
         path="/dashboard"
         element={data ? <DashboardPage /> : <Navigate to="/auth" replace />}
+      />
+      <Route
+        path="/post/create"
+        element={data ? <CreatePostPage /> : <Navigate to="/auth" replace />}
       />
       <Route
         path="/auth"
