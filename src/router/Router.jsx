@@ -1,3 +1,4 @@
+
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../services/user";
@@ -16,45 +17,66 @@ function Router() {
   const { data, isPending, error } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
+    retry: false,
   });
+
   if (isPending) return <Loader size={80} />;
 
-  console.log({ data, isPending, error });
+  const profile = error ? null : data?.data;
+  const isAdmin = profile?.role === "ADMIN";
+  const isAuthenticated = !!profile;
 
   return (
     <Routes>
       <Route index element={<HomePage />} />
+
       <Route
         path="/dashboard"
-        element={data ? <DashboardPage /> : <Navigate to="/auth" replace />}
+        element={
+          isAuthenticated ? (
+            <DashboardPage />
+          ) : (
+            <Navigate to="/auth" replace />
+          )
+        }
       />
+
       <Route
         path="/post/create"
-        element={data ? <CreatePostPage /> : <Navigate to="/auth" replace />}
+        element={
+          isAuthenticated ? (
+            <CreatePostPage />
+          ) : (
+            <Navigate to="/auth" replace />
+          )
+        }
       />
+
       <Route
         path="/auth"
         element={
-          data ? (
-            <Navigate
-              to={data.data.role === "ADMIN" ? "/admin" : "/dashboard"}
-              replace
-            />
+          isAuthenticated ? (
+            <Navigate to={isAdmin ? "/admin" : "/dashboard"} replace />
           ) : (
             <AuthPage />
           )
         }
       />
+
       <Route
         path="/admin"
         element={
-          data?.data?.role === "ADMIN" ? (
+          isAdmin ? (
             <AdminPage />
           ) : (
-            <Navigate to={data ? "/dashboard" : "/auth"} replace />
+            <Navigate
+              to={isAuthenticated ? "/dashboard" : "/auth"}
+              replace
+            />
           )
         }
       />
+
       <Route path="/posts" element={<PostsPage />} />
       <Route path="/posts/:id" element={<PostDetailsPage />} />
       <Route path="*" element={<PageNotFound />} />

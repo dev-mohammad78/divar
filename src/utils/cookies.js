@@ -1,17 +1,14 @@
 const setCookie = (tokens) => {
-  document.cookie = `accessToken=${tokens.accessToken}; max-age=${
-    1 * 24 * 60 * 60
-  }`;
-  document.cookie = `refreshToken=${tokens.refreshToken}; max-age=${
-    30 * 24 * 60 * 60
-  }`;
+  document.cookie = `accessToken=${tokens.accessToken}; max-age=86400; path=/; SameSite=Lax`;
+  document.cookie = `refreshToken=${tokens.refreshToken}; max-age=2592000; path=/; SameSite=Lax`;
 };
 
-const getCookie = (cookieName) => {
-  return document.cookie
-    .split(";")
-    .find((token) => token.trim().split("=")[0] === cookieName)
-    ?.split("=")[1];
+const getCookie = (name) => {
+  const cookie = document.cookie
+    .split("; ")
+    .find((item) => item.startsWith(`${name}=`));
+
+  return cookie ? cookie.substring(name.length + 1) : undefined;
 };
 
 const removeCookie = () => {

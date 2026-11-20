@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import api from "../../configs/api";
 import toast from "react-hot-toast";
 
 import { getCookie } from "../../utils/cookies";
@@ -84,7 +84,7 @@ function AddPost() {
     const token = getCookie("accessToken");
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${import.meta.env.VITE_BASE_URL}/post/create`,
         formData,
         {

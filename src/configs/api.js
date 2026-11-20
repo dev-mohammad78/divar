@@ -1,13 +1,15 @@
 import axios from "axios";
-import { getCookie, setCookie } from "../utils/cookies";
+import { baseUrl } from "../constant/baseUrl";
+import { getCookie, setCookie, removeCookie } from "../utils/cookies";
 import { getNewTokens } from "../services/token";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: baseUrl,
   headers: {
     "Content-Type": "application/json",
   },
 });
+let refreshPromise = null;
 
 api.interceptors.request.use(
   (request) => {
@@ -25,27 +27,53 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    const isRefreshRequest = originalRequest?.url?.includes(
+      "/auth/check-refresh-token",
+    );
 
-      const res = await getNewTokens();
-
-      if (!res?.response) {
-        return Promise.reject(error);
-      }
-
-      setCookie(res.response.data);
-
-      return api(originalRequest);
+    if (
+      error.response?.status !== 401 ||
+      originalRequest?._retry ||
+      isRefreshRequest
+    ) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    originalRequest._retry = true;
+
+    try {
+      if (!refreshPromise) {
+        refreshPromise = getNewTokens()
+          .then((res) => {
+            if (!res?.response) {
+              throw res?.error || error;
+            }
+
+            setCookie(res.response.data);
+            return res.response.data;
+          })
+          .finally(() => {
+            refreshPromise = null;
+          });
+      }
+
+      await refreshPromise;
+
+      return api(originalRequest);
+    } catch (refreshError) {
+      const status = refreshError?.response?.status;
+
+      if (status === 401 || status === 403) {
+        removeCookie();
+      }
+
+      return Promise.reject(refreshError);
+    }
   },
 );
+
 export default api;
