@@ -6,8 +6,8 @@ function OtpInput({ length = 5, code, setCode }) {
   const handleChange = (value, index) => {
     const digit = value.replace(/\D/g, "").slice(-1);
     const newCode = code.split("");
-    newCode[index] = digit;
 
+    newCode[index] = digit;
     setCode(newCode.join(""));
 
     if (digit && index < length - 1) {
@@ -16,7 +16,11 @@ function OtpInput({ length = 5, code, setCode }) {
   };
 
   const handleKeyDown = (event, index) => {
-    if (event.key === "Backspace" && !code[index] && index > 0) {
+    if (
+      (event.key === "Backspace" || event.key === "Delete") &&
+      !code[index] &&
+      index > 0
+    ) {
       inputsRef.current[index - 1]?.focus();
     }
   };
@@ -29,7 +33,7 @@ function OtpInput({ length = 5, code, setCode }) {
       .replace(/\D/g, "")
       .slice(0, length);
 
-    setCode(pasted.padEnd(length, "").slice(0, length));
+    setCode(pasted);
 
     inputsRef.current[Math.min(pasted.length, length - 1)]?.focus();
   };
@@ -44,6 +48,7 @@ function OtpInput({ length = 5, code, setCode }) {
           inputMode="numeric"
           pattern="[0-9]*"
           autoComplete={index === 0 ? "one-time-code" : "off"}
+          aria-label={`رقم ${index + 1} کد تأیید`}
           maxLength={1}
           value={code[index] || ""}
           onChange={(event) => handleChange(event.target.value, index)}

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -11,28 +11,40 @@ import { checkOtp } from "../../services/auth";
 import { setCookie } from "../../utils/cookies";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
+  const [isPending, setIsPending] = useState(false);
   const queryClient = useQueryClient();
-
-  const navigate = useNavigate();
 
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    if (code.length !== 5) return;
-    const { response, error } = await checkOtp(mobile, code);
-    console.log({ response, error });
+    if (code.length !== 5 || isPending) return;
 
-    if (response) {
-      setCookie(response.data);
-      await queryClient.invalidateQueries({
-        queryKey: ["profile"],
-      });
+    setIsPending(true);
+
+    try {
+      const { response, error } = await checkOtp(mobile, code);
+
+      if (error) {
+        toast.error(error?.response?.data?.message || "خطا در تأیید کد");
+        return;
+      }
+
+      if (response) {
+        setCookie(response.data);
+
+        queryClient.removeQueries({
+          queryKey: ["my-post-list"],
+        });
+
+        await queryClient.invalidateQueries({
+          queryKey: ["profile"],
+        });
+      }
+    } catch {
+      toast.error("خطایی در ورود رخ داد");
+    } finally {
+      setIsPending(false);
     }
-    if (error) console.log(error.response.data.message);
-
-    queryClient.removeQueries({
-      queryKey: ["my-post-list"],
-    });
   };
 
   return (
@@ -48,7 +60,7 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
       >
         {/* Logo */}
         <div className="my-4 md:my-12">
-          <img src={divar} className="w-20 h-20" />
+          <img src={divar} alt="لوگوی دیوار" className="w-20 h-20" />
         </div>
         {/* details */}
         <div className="pt-2 md:pt-4 text-center">
@@ -63,11 +75,13 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
 
         <button
           type="submit"
-          className="min-w-[350px] mt-8 p-3 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--text-white)]"
+          disabled={isPending || code.length !== 5}
+          className="min-w-[350px] mt-8 p-3 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-white)]"
         >
-          تایید کد
+          {isPending ? "در حال بررسی..." : "تایید کد"}
         </button>
         <button
+          type="button"
           onClick={() => setStep(1)}
           className="flex items-center gap-x-2 mt-4 p-3 text-sm text-[var(--text-secondary)] cursor-pointer"
         >
@@ -81,6 +95,7 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
       <div className="max-w-[400px] order-1 sm:order-2">
         <img
           src={checking}
+          alt="تأیید کد ورود"
           className="md:rounded-l-lg inset-0 h-full w-full object-center"
         />
       </div>

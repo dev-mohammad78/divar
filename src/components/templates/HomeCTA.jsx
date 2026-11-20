@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -6,7 +5,6 @@ const HomeCTA = () => {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 lg:px-10">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 overflow-hidden rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6 md:p-10">
-
         <div className="flex flex-col items-start gap-5">
           <span className="text-sm font-semibold text-[var(--color-primary)]">
             فرصت جدید برای خرید و فروش
@@ -21,7 +19,7 @@ const HomeCTA = () => {
           </p>
 
           <Link
-            to="/dashboard"
+            to="post/create"
             className="inline-flex items-center gap-3 rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white transition hover:opacity-90"
           >
             ثبت رایگان آگهی
@@ -36,7 +34,6 @@ const HomeCTA = () => {
             className="h-64 w-full object-cover md:h-80"
           />
         </div>
-
       </div>
     </section>
   );

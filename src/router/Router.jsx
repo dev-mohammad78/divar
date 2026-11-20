@@ -9,7 +9,7 @@ import CreatePostPage from "../pages/CreatePostPage";
 import AuthPage from "../pages/AuthPage";
 import AdminPage from "../pages/AdminPage";
 import PostsPage from "../pages/PostsPage";
-import PostDetailsPage from "../layouts/PostDetailsPage";
+import PostDetailsPage from "../pages/PostDetailsPage";
 import PageNotFound from "../pages/404";
 
 function Router() {

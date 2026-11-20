@@ -1,3 +1,4 @@
+import { useState } from "react";
 import divar from "../../../public/divar.svg";
 import intro from "../../assets/img/intro.webp";
 import { FiPhoneCall } from "react-icons/fi";
@@ -7,26 +8,35 @@ import ThemeToggle from "../ThemeToggle";
 import { sendOtp } from "../../services/auth";
 
 function SendOtpForm({ setStep, mobile, setMobile }) {
-  
+  const [isPending, setIsPending] = useState(false);
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
+    if (isPending) return;
+
     if (!/^09\d{9}$/.test(mobile)) {
-      toast.error("شماره موبایل معتبر نیست.");
+      toast.error("شماره موبایل معتبر نیست");
       return;
     }
 
-    const { response, error } = await sendOtp(mobile);
+    setIsPending(true);
 
-    if (response) {
-      toast.success("کد تأیید ارسال شد.");
-      setStep(2);
-    }
+    try {
+      const { response, error } = await sendOtp(mobile);
 
-    if (error) {
-      toast.error(
-        error.response?.data?.message || "ارسال کد تأیید ناموفق بود.",
-      );
+      if (error) {
+        toast.error(
+          error?.response?.data?.message || "ارسال کد تأیید ناموفق بود",
+        );
+        return;
+      }
+
+      if (response) {
+        setStep(2);
+      }
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -74,9 +84,10 @@ function SendOtpForm({ setStep, mobile, setMobile }) {
         </div>
         <button
           type="submit"
+          disabled={isPending}
           className="min-w-[350px] mt-8 p-3 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--text-white)]"
         >
-          ارسال کد
+          {isPending ? "در حال ارسال..." : "دریافت کد تایید"}
         </button>
       </form>
       {/* image */}
