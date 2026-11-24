@@ -7,6 +7,7 @@ import { getCookie } from "../../utils/cookies";
 import { getCategory } from "../../services/admin";
 import formatNumber from "../../utils/formatNumber";
 import CustomSelect from "../common/CustomSelect";
+import { baseUrl } from "../../constant/baseUrl";
 
 function AddPost() {
   const [form, setForm] = useState({
@@ -84,22 +85,23 @@ function AddPost() {
     const token = getCookie("accessToken");
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/post/create`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.post(`${baseUrl}/post/create`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       toast.success(response.data.message);
 
-      await queryClient.refetchQueries({
-        queryKey: ["my-post-list"],
-        type: "all",
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["my-post-list"],
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: ["latest-posts"],
+        }),
+      ]);
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }

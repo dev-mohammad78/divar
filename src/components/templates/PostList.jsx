@@ -35,8 +35,13 @@ function PostList() {
     mutationFn: deletePost,
     onSuccess: () => {
       toast.success("آگهی با موفقیت حذف شد");
+
       queryClient.invalidateQueries({
         queryKey: ["my-post-list"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latest-posts"],
       });
     },
     onError: () => {
