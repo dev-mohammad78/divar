@@ -30,7 +30,7 @@ const PostDetailsPage = () => {
 
   const post = data.post;
   const images = post.images || [];
-  console.log("Post details:", post);
+  
 
   return (
     <main className="px-4 py-10 lg:px-10 bg-[var(--bg-tertiary)]">

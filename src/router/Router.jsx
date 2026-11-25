@@ -19,7 +19,6 @@ function Router() {
   });
   if (isPending) return <Loader size={80} />;
 
-  console.log({ data, isPending, error });
 
   return (
     <Routes>

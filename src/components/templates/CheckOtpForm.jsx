@@ -9,6 +9,7 @@ import ThemeToggle from "../ThemeToggle";
 import OtpInput from "./OtpInput";
 import { checkOtp } from "../../services/auth";
 import { setCookie } from "../../utils/cookies";
+import toast from "react-hot-toast";
 
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
   const queryClient = useQueryClient();
@@ -20,7 +21,6 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
 
     if (code.length !== 5) return;
     const { response, error } = await checkOtp(mobile, code);
-    console.log({ response, error });
 
     if (response) {
       setCookie(response.data);
@@ -28,8 +28,9 @@ function CheckOtpForm({ code, setCode, mobile, setStep }) {
         queryKey: ["profile"],
       });
     }
-    if (error) console.log(error.response.data.message);
-
+    if (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
     queryClient.removeQueries({
       queryKey: ["my-post-list"],
     });

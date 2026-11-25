@@ -2,14 +2,13 @@ import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { deleteCategory, getCategory } from "../../services/admin";
 import Loader from "../Loader";
 import { FaRegTrashCan } from "react-icons/fa6";
+import toast from "react-hot-toast";
 
 function CategoryList() {
   const { isPending, data } = useQuery({
     queryKey: ["get-categories"],
     queryFn: getCategory,
   });
-  console.log(data?.data);
-  console.log(data?.data?.map((item) => item.id));
 
   return (
     <div>
@@ -41,9 +40,11 @@ function CategoryItem({ item }) {
       queryClient.invalidateQueries({
         queryKey: ["get-categories"],
       });
+
+      toast.success("دسته‌بندی با موفقیت حذف شد");
     },
     onError: (error) => {
-      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
     },
   });
 
@@ -60,7 +61,9 @@ function CategoryItem({ item }) {
           disabled={isPending}
           onClick={() => mutate(item._id)}
           className={`transition-opacity ${
-            isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:text-[var(--color-primary)]"
+            isPending
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer hover:text-[var(--color-primary)]"
           }`}
         >
           <FaRegTrashCan size={20} />

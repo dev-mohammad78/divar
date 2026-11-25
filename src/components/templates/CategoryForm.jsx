@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdOutlineAttachment, MdOutlineInsertEmoticon } from "react-icons/md";
 import { TbSubtitlesEdit } from "react-icons/tb";
+import toast from "react-hot-toast";
 
 import { addCategory } from "../../services/admin";
 
@@ -22,7 +23,9 @@ function CategoryForm() {
 
       setForm({ name: "", slug: "", icon: "" });
     },
-    onError: (error) => console.log("Error:", error),
+    onError: (error) => {
+      toast.error(error.response?.data?.message || error.message);
+    },
   });
 
   const changeHandler = (event) => {
@@ -32,14 +35,12 @@ function CategoryForm() {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    console.log("Form data:", form);
-
     if (!form.name || !form.slug || !form.icon) {
-      console.log("Fields are empty");
+      toast.error("لطفاً تمام فیلد‌ها را پر کنید");
       return;
     }
 
-    console.log("Sending request...");
+    toast.success("در حال ایجاد دسته‌بندی...");
     mutate(form);
   };
 
